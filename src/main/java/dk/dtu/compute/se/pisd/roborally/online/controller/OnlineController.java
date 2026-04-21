@@ -129,10 +129,10 @@ public class OnlineController {
 
     public void refreshGames() {
         try {
-            // TODO Assignment 7b: Obtain the list of all games from the backend!
+            // DONE Assignment 7b: Obtain the list of all games from the backend!
             // TODO Assignment 7c/7e: And at some later point, this should only
             //      return the games open for registration (not started yet).
-            List<Game> games = new ArrayList<Game>(); // For now this list is empty
+            List<Game> games = restClient.get().uri("/game").retrieve().body(new ParameterizedTypeReference<>() {});
             onlineState.setOpenGames(games);
         } catch (Exception e) {
             onlineState.setOpenGames(null);
