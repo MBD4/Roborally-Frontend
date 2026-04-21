@@ -183,9 +183,9 @@ public class OnlineController {
 
 
             try {
-
                 // TODO Assignment 7b: Create the game (in the backend) with the config information
                 //      provided in the game configuration
+                restClient.post().uri("/game").body(game).retrieve().body(Game.class);
                 // TODO Assignment 7c: Extend the game creation so that the currently signed in user
                 //      is the owener of the game, which should also be registered as the first
                 //      player of the game
