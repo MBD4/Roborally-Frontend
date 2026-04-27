@@ -206,7 +206,7 @@ public class OnlineController {
     public void joinGame(Game game) {
         try {
 
-            // TODO Assignment 7c: add the currently active user as a Player for
+            // DONE Assignment 7c: add the currently active user as a Player for
             //      the given game if this user is not a player yet and if there
             //      is still room for a player. If so post his to the backend,
             //      and check whether this was successfull
