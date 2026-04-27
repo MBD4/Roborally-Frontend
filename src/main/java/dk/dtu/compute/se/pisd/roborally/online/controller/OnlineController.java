@@ -185,10 +185,10 @@ public class OnlineController {
             try {
                 // DONE Assignment 7b: Create the game (in the backend) with the config information
                 //      provided in the game configuration
-                // TODO Assignment 7c: Extend the game creation so that the currently signed in user
+                // DONE Assignment 7c: Extend the game creation so that the currently signed in user
                 //      is the owner of the game, which should also be registered as the first
                 //      player of the game
-                game.setUser(onlineState.getSignedInUser());
+                game.setOwner(onlineState.getSignedInUser());
                 restClient.post().uri("/game").body(game).retrieve().body(Game.class);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -210,6 +210,26 @@ public class OnlineController {
             //      the given game if this user is not a player yet and if there
             //      is still room for a player. If so post his to the backend,
             //      and check whether this was successfull
+
+            User activeUser = onlineState.getSignedInUser();
+
+            // check how many players are currently in the game
+            int currentPlayersCount = game.getPlayers() != null ? game.getPlayers().size() : 0;
+
+            // Check the join conditions
+            if (activeUser != null && !userInGame(game) && currentPlayersCount < game.getMaxPlayers()) {
+                // 1. Just create the player
+                Player newPlayer = new Player();
+                newPlayer.setGame(game);
+                newPlayer.setUser(activeUser);
+                newPlayer.setName(activeUser.getName());
+
+                restClient.post()
+                        .uri("/player") // Ensure this matches your backend controller
+                        .body(newPlayer)
+                        .retrieve()
+                        .toBodilessEntity();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,16 +265,38 @@ public class OnlineController {
 
     public boolean userInGame(Game game) {
 
-        // TODO Assignment 7c: this method should return true if the
+        // DONE Assignment 7c: this method should return true if the
         //      currently active user is a player of the game
+        User currentUser = onlineState.getSignedInUser();
+
+        // safety checks
+        if (currentUser == null || game.getPlayers() == null) {
+            return false;
+        }
+
+        for (Player currentPlayer: game.getPlayers()) {
+            if (currentPlayer.getUser().getUid() == currentUser.getUid()) {
+                return true;
+            }
+        }
 
         return false;
     }
 
     public boolean userOwnsGame(Game game) {
 
-        // TODO Assignment 7c: this method should return true
+        // DONE Assignment 7c: this method should return true
         //      if the currently active user the owner of the given game
+        User currentUser = onlineState.getSignedInUser();
+
+        // safety checks
+        if (currentUser == null || game.getOwner() == null) {
+            return false;
+        }
+
+        if (game.getOwner().getUid() == currentUser.getUid()) {
+            return true;
+        }
 
         return false;
     }

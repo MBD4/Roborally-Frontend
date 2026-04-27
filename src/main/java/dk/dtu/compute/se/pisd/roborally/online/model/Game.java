@@ -31,7 +31,7 @@ public class Game {
 
     private List<Player> players;
 
-    private User user;
+    private User owner;
 
     // TODO There could be more attributes here, kie
     //      in which state is the sign up for the game, did
@@ -79,12 +79,12 @@ public class Game {
         this.players = players;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User user) {
+        this.owner = user;
     }
 
     @Override
