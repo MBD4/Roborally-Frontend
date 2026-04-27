@@ -47,7 +47,7 @@ public class OnlineController {
 
     public void signIn(String name) {
         // FIXME the 4 below is a bit arbitray and should be a constant defines
-        //       somewhere in the code or a configuration file!
+        //       somewhere in the code or a configuration file!!
         if (name.length() >= 4) {
             try {
                 List<User> users = restClient.get()
