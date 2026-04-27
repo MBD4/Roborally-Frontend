@@ -109,8 +109,55 @@ public class OnlineController {
         }
     }
 
-    // TODO Assignment 7c: you might want to implement a method of signing up
+    // DONE Assignment 7c: you might want to implement a method of signing up
     //      (registering) a new user here!
+    public void signUp(String name) {
+        if (name.length() >= 4) {
+            try {
+                User newUser = new User();
+                newUser.setName(name);
+
+                User createdUser = restClient.post()
+                        .uri("/user") // Make sure this matches your UserController!
+                        .body(newUser)
+                        .retrieve()
+                        .body(User.class);
+
+                if (createdUser != null) {
+                    setOnlineUser(createdUser);
+                }
+
+            } catch (Exception e) {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("SignUp Failed");
+                alert.setHeaderText("Could not create user");
+                alert.setContentText("That username is likely already taken. Please try another one.");
+                alert.showAndWait();
+            }
+        } else {
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Name");
+            alert.setHeaderText("Name too short");
+            alert.setContentText("Your username must be at least 4 characters long.");
+            alert.showAndWait();
+        }
+    }
+
+    public void signUp() {
+        if (appController.isGameRunning()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game running");
+            alert.setHeaderText("You cannot sign up while a game is running!");
+            alert.showAndWait();
+        } else if (gameSelectionOn) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game selection is active");
+            alert.setHeaderText("You cannot sign up while game selection is active!");
+            alert.showAndWait();
+        } else {
+            appDialogs.signUp(); // Opens the dialog you just created
+        }
+    }
 
     public void setOnlineUser(User user) {
         if (!appController.isGameRunning() && !gameSelectionOn) {

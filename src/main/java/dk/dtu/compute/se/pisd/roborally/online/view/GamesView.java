@@ -46,12 +46,18 @@ public class GamesView extends GridPane {
                                 ", max: " + game.getMaxPlayers() + ")" );
                 gameInfo.getChildren().add(gameName);
 
-                // TODO Assignment 7c: Update the detailed description of the game
+                // DONE Assignment 7c: Update the detailed description of the game
                 //      with game owner and  all players who joined.
-                for (Player player: game.getPlayers()) {
-                    Text playerInfo = new Text("\n  Player " + player.getName()
-                            /* + " (" + player.getUser().getName() + ")" */ );
-                    gameInfo.getChildren().add(playerInfo);
+                String ownerName = game.getOwner() != null ? game.getOwner().getName() : "Unknown Owner";
+                Text ownerInfo = new Text("\n  Owner: " + ownerName);
+                gameInfo.getChildren().add(ownerInfo);
+
+                if (game.getPlayers() != null) {
+                    for (Player player: game.getPlayers()) {
+                        String userName = player.getUser() != null ? player.getUser().getName() : "Unknown User";
+                        Text playerInfo = new Text("\n  Player: " + player.getName() + " (" + userName + ")");
+                        gameInfo.getChildren().add(playerInfo);
+                    }
                 }
                 gameInfo.setTextAlignment(TextAlignment.LEFT);
                 gameInfo.setLineSpacing(1.0);
