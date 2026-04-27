@@ -31,6 +31,8 @@ public class Game {
 
     private List<Player> players;
 
+    private User user;
+
     // TODO There could be more attributes here, kie
     //      in which state is the sign up for the game, did
     //      the game started or finish (after the game started
@@ -75,6 +77,14 @@ public class Game {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

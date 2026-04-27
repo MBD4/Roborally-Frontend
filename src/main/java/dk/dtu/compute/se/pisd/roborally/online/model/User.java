@@ -18,6 +18,8 @@ public class User {
 
     private List<Player> players;
 
+    private List<Game> games;
+
     public long getUid() {
         return uid;
     }
@@ -40,6 +42,14 @@ public class User {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 
     @Override
