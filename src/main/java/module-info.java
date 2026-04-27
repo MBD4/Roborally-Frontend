@@ -4,6 +4,7 @@
  */
 module roborally {
 
+    requires java.net.http;
     requires javafx.controls;
     requires org.jetbrains.annotations;
     requires java.sql;

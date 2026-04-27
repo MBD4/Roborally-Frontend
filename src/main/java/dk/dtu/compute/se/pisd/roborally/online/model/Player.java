@@ -15,7 +15,7 @@ public class Player {
 
     private Game game;
 
-    // ...
+    private User user;
 
     public long getUid() {
         return uid;
@@ -41,6 +41,13 @@ public class Player {
         this.game = game;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {
