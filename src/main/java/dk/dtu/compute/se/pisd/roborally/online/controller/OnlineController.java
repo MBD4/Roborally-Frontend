@@ -235,7 +235,11 @@ public class OnlineController {
                 // DONE Assignment 7c: Extend the game creation so that the currently signed in user
                 //      is the owner of the game, which should also be registered as the first
                 //      player of the game
-                game.setOwner(onlineState.getSignedInUser());
+
+                // Use a stub for the owner to prevent JSON circular reference errors
+                User stubOwner = new User();
+                stubOwner.setUid(onlineState.getSignedInUser().getUid());
+                game.setOwner(stubOwner);
                 restClient.post().uri("/game").body(game).retrieve().body(Game.class);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -265,10 +269,20 @@ public class OnlineController {
 
             // Check the join conditions
             if (activeUser != null && !userInGame(game) && currentPlayersCount < game.getMaxPlayers()) {
-                // 1. Just create the player
+
+                // Create lightweight "stubs" to avoid sending massive circular JSON to the backend, this can cause an,
+                // error so a user cant join a game
+                Game stubGame = new Game();
+                stubGame.setUid(game.getUid());
+
+                User stubUser = new User();
+                stubUser.setUid(activeUser.getUid());
+
+
+                // create the player
                 Player newPlayer = new Player();
-                newPlayer.setGame(game);
-                newPlayer.setUser(activeUser);
+                newPlayer.setGame(stubGame);
+                newPlayer.setUser(stubUser);
                 newPlayer.setName(activeUser.getName());
 
                 restClient.post()
