@@ -300,8 +300,10 @@ public class OnlineController {
     public void deleteGame(Game game) {
         try {
 
-            // TODO Assignment 7d: delete the given game from the games
+            // DONE Assignment 7d: delete the given game from the games
             //      in the backend
+            long uid = game.getUid();
+            restClient.delete().uri("/game/{id}",uid).retrieve().toBodilessEntity();
 
         } catch (Exception e) {
             e.printStackTrace();
