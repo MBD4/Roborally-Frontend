@@ -287,8 +287,17 @@ public class OnlineController {
 
     public void leaveGame(Game game) {
         try {
-            // TODO Assignment 7d: delete the currently active user as a player
+            // DONE Assignment 7d: delete the currently active user as a player
             //      for the given game (in the backend)
+            User activeUser = onlineState.getSignedInUser();
+            long uid;
+            for (Player cPlayer: game.getPlayers()) {
+                if (cPlayer.getUser().getUid() == activeUser.getUid()){
+                    uid = cPlayer.getUid();
+                    restClient.delete().uri("/player/{id}",uid).retrieve().toBodilessEntity();
+                }
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
