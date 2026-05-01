@@ -216,11 +216,26 @@ public class OnlineController {
             Game result = null;
             if (game != null) {
 
-                // TODO Assignment 7e: make sure the game is set to the active state
+                // DONE Assignment 7e: make sure the game is set to the active state
                 //      here and in the backend, so that no new players can sign up.
+                try {
+                    Game stubGame = new Game();
+                    stubGame.setUid(game.getUid());
+                    stubGame.setState(GameState.ACTIVE);
+
+                    restClient.patch()
+                            .uri("/game/{id}", game.getUid())
+                            .body(stubGame)
+                            .retrieve()
+                            .toBodilessEntity();
+
+                } catch (Exception e) {
+                    System.out.println("Failed to start the game on the server: " + e.getMessage());
+                    return;
+                }
 
                 // Then show the game board and the game (with uid from backend) is then started
-                startGame(result);
+                startGame(game);
             }
         }
     }
@@ -374,7 +389,7 @@ public class OnlineController {
     }
 
     private void startGame(Game game) {
-        // TODO Assignment 7e: creation of the board should eventually depend
+        // OPTIONAL(didnt do it) Assignment 7e: creation of the board should eventually depend
         //      on the board provided by the Game information.
         //      And every user who had joined the game should be able to start
         //      it in their client (individually -- no interactive gameplay
