@@ -217,7 +217,7 @@ public class OnlineController {
             if (game != null) {
 
                 // DONE Assignment 7e: make sure the game is set to the active state
-                //      here and in the backend, so that no new players can sign up.
+                //      here and in the backend, so that no new players can sign up..
                 try {
                     Game stubGame = new Game();
                     stubGame.setUid(game.getUid());
