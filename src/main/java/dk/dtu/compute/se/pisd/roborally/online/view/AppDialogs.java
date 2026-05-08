@@ -53,8 +53,6 @@ public class AppDialogs {
         stage.show();
     }
 
-    // DONE Assignment 7c you might want to implement a dialog for a SingUp or
-    //      registering a new user.
     public void signUp() {
         Stage stage = new Stage();
 

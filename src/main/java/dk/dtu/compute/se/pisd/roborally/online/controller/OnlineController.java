@@ -60,8 +60,6 @@ public class OnlineController {
      * @throws RuntimeException if the REST call fails
      */
     public void signIn(String name) {
-        // DONE the 4 below is a bit arbitray and should be a constant defines
-        //       somewhere in the code or a configuration file!!
         if (name.length() >= MIN_USERNAME_LENGTH) {
             try {
                 List<User> users = restClient.get()
@@ -79,11 +77,6 @@ public class OnlineController {
                 throw new RuntimeException("exception happened in signIn(String name) in OnlineController.java");
             }
 
-            // DONE Assignment 7b: make sure that the user with the given name
-            //      exist in the backend; and make sure that you set the user
-            //      returened by the backend (with the correct uid) is added
-            //      as onLineUser in this controller! (NOT the once created
-            //      in the code below!)
         }
     }
 
@@ -126,9 +119,6 @@ public class OnlineController {
             }
         }
     }
-
-    // DONE Assignment 7c: you might want to implement a method of signing up
-    //      (registering) a new user here!
 
     /**
      * Register a new user by Posting to {@code /user}. Validates that {@code name}
@@ -215,9 +205,6 @@ public class OnlineController {
      */
     public void refreshGames() {
         try {
-            // DONE Assignment 7b: Obtain the list of all games from the backend!
-            // DONE Assignment 7c/7e: And at some later point, this should only
-            //      return the games open for registration (not started yet).
             List<Game> openGames = restClient.get().uri("/game/open").retrieve().body(new ParameterizedTypeReference<>() {});
             List<Game> startedGames = restClient.get().uri("/game/started").retrieve().body(new ParameterizedTypeReference<List<Game>>() {});
             if (startedGames != null) {
@@ -269,8 +256,6 @@ public class OnlineController {
             Game result = null;
             if (game != null) {
 
-                // DONE Assignment 7e: make sure the game is set to the active state
-                //      here and in the backend, so that no new players can sign up..
                 try {
                     Game stubGame = new Game();
                     stubGame.setUid(game.getUid());
@@ -301,12 +286,6 @@ public class OnlineController {
 
 
             try {
-                // DONE Assignment 7b: Create the game (in the backend) with the config information
-                //      provided in the game configuration
-                // DONE Assignment 7c: Extend the game creation so that the currently signed in user
-                //      is the owner of the game, which should also be registered as the first
-                //      player of the game
-
                 // Use a stub for the owner to prevent JSON circular reference errors
                 User stubOwner = new User();
                 stubOwner.setUid(onlineState.getSignedInUser().getUid());
@@ -335,11 +314,7 @@ public class OnlineController {
     public void joinGame(Game game) {
         try {
 
-            // DONE Assignment 7c: add the currently active user as a Player for
-            //      the given game if this user is not a player yet and if there
-            //      is still room for a player. If so post his to the backend,
-            //      and check whether this was successfull
-
+     
             User activeUser = onlineState.getSignedInUser();
 
             // check how many players are currently in the game
@@ -382,8 +357,6 @@ public class OnlineController {
      */
     public void leaveGame(Game game) {
         try {
-            // DONE Assignment 7d: delete the currently active user as a player
-            //      for the given game (in the backend)
             User activeUser = onlineState.getSignedInUser();
             long uid;
             for (Player cPlayer: game.getPlayers()) {
@@ -407,8 +380,6 @@ public class OnlineController {
     public void deleteGame(Game game) {
         try {
 
-            // DONE Assignment 7d: delete the given game from the games
-            //      in the backend
             long uid = game.getUid();
             restClient.delete().uri("/game/{id}",uid).retrieve().toBodilessEntity();
 
@@ -424,8 +395,6 @@ public class OnlineController {
      */
     public boolean userInGame(Game game) {
 
-        // DONE Assignment 7c: this method should return true if the
-        //      currently active user is a player of the game
         User currentUser = onlineState.getSignedInUser();
 
         // safety checks
@@ -447,8 +416,6 @@ public class OnlineController {
      */
     public boolean userOwnsGame(Game game) {
 
-        // DONE Assignment 7c: this method should return true
-        //      if the currently active user the owner of the given game
         User currentUser = onlineState.getSignedInUser();
 
         // safety checks
