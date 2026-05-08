@@ -47,7 +47,7 @@ public class GamesView extends GridPane {
                 gameInfo.getChildren().add(gameName);
 
                 // DONE Assignment 7c: Update the detailed description of the game
-                //      with game owner and  all players who joined.
+                //      with game owner and all players who joined.
                 String ownerName = game.getOwner() != null ? game.getOwner().getName() : "Unknown Owner";
                 Text ownerInfo = new Text("\n  Owner: " + ownerName);
                 gameInfo.getChildren().add(ownerInfo);
@@ -55,7 +55,7 @@ public class GamesView extends GridPane {
                 if (game.getPlayers() != null) {
                     for (Player player: game.getPlayers()) {
                         String userName = player.getUser() != null ? player.getUser().getName() : "Unknown User";
-                        Text playerInfo = new Text("\n  Player: " + player.getName() + " (" + userName + ")");
+                        Text playerInfo = new Text("\n  Player: "  + userName);
                         gameInfo.getChildren().add(playerInfo);
                     }
                 }
@@ -95,7 +95,7 @@ public class GamesView extends GridPane {
                 startButton.setOnAction( e -> onlineController.gameSelected(game) );
                 if (game.getMinPlayers() <= game.getPlayers().size() &&
                         game.getMaxPlayers() >= game.getPlayers().size() &&
-                        onlineController.userInGame(game)) {
+                        onlineController.userOwnsGame(game)) {
                     startButton.setDisable(false);
                 } else {
                     startButton.setDisable(true);

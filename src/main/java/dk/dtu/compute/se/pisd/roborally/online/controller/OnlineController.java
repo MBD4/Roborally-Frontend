@@ -302,6 +302,7 @@ public class OnlineController {
                 // Use a stub for the owner to prevent JSON circular reference errors
                 User stubOwner = new User();
                 stubOwner.setUid(onlineState.getSignedInUser().getUid());
+                stubOwner.setName(onlineState.getSignedInUser().getName());
                 game.setOwner(stubOwner);
                 restClient.post().uri("/game").body(game).retrieve().body(Game.class);
             } catch (Exception e) {
