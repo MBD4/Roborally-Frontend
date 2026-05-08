@@ -112,9 +112,6 @@ class Repository implements IRepository {
 				connection.setAutoCommit(false);
 
 				PreparedStatement ps = getInsertGameStatementRGK();
-				// TODO: the name should eventually be set by the user
-				//       for the game and should be then obtained by
-				//       game.getName();
 				ps.setString(1, "Date: " +  new Date()); // instead of name
 				ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
 				ps.setInt(3, game.getPhase().ordinal());
@@ -139,7 +136,7 @@ class Repository implements IRepository {
 				// statement.close();
 
 				createPlayersInDB(game);
-				/* TODO DB4a: this method needs to be implemented first
+				/*  DB4a: this method needs to be implemented first
 				createCardFieldsInDB(game);
 				 */
 
@@ -155,7 +152,6 @@ class Repository implements IRepository {
 					rs.updateInt(GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
 					rs.updateRow();
 				} else {
-					// TODO error handling
 				}
 				rs.close();
 
@@ -163,7 +159,6 @@ class Repository implements IRepository {
 				connection.setAutoCommit(true);
 				return true;
 			} catch (SQLException e) {
-				// TODO error handling
 				e.printStackTrace();
 				System.err.println("Some DB error");
 				
@@ -171,7 +166,6 @@ class Repository implements IRepository {
 					connection.rollback();
 					connection.setAutoCommit(true);
 				} catch (SQLException e1) {
-					// TODO error handling
 					e1.printStackTrace();
 				}
 			}
@@ -199,12 +193,11 @@ class Repository implements IRepository {
 				rs.updateInt(GAME_STEP, game.getStep());
 				rs.updateRow();
 			} else {
-				// TODO error handling
 			}
 			rs.close();
 
 			updatePlayersInDB(game);
-			/* TODO DB4a: this method needs to be implemented first
+			/*  DB4a: this method needs to be implemented first
 			updateCardFieldsInDB(game);
 			*/
 
@@ -212,7 +205,6 @@ class Repository implements IRepository {
             connection.setAutoCommit(true);
 			return true;
 		} catch (SQLException e) {
-			// TODO error handling
 			e.printStackTrace();
 			System.err.println("Some DB error");
 			
@@ -220,7 +212,6 @@ class Repository implements IRepository {
 				connection.rollback();
 				connection.setAutoCommit(true);
 			} catch (SQLException e1) {
-				// TODO error handling
 				e1.printStackTrace();
 			}
 		}
@@ -241,19 +232,14 @@ class Repository implements IRepository {
 			ResultSet rs = ps.executeQuery();
 			int playerNo = -1;
 			if (rs.next()) {
-				// TODO DB4b: and we should also store the name of the used game board
-				//      in the database, and load the corresponding board from the
-				//      JSON file. For now, we use the default game board.
 				game = BoardFactory.getInstance().createBoard(null);
 				if (game == null) {
 					return null;
 				}
 				playerNo = rs.getInt(GAME_CURRENTPLAYER);
-				// TODO currently we do not set the games name (needs to be added)
 				game.setPhase(Phase.values()[rs.getInt(GAME_PHASE)]);
 				game.setStep(rs.getInt(GAME_STEP));
 			} else {
-				// TODO error handling
 				return null;
 			}
 			rs.close();
@@ -264,17 +250,15 @@ class Repository implements IRepository {
 			if (playerNo >= 0 && playerNo < game.getPlayersNumber()) {
 				game.setCurrentPlayer(game.getPlayer(playerNo));
 			} else {
-				// TODO  error handling
 				return null;
 			}
 
-			/* TODO DB4a: this method needs to be implemented first
+			/*  DB4a: this method needs to be implemented first
 			loadCardFieldsFromDB(game);
 			*/
 
 			return game;
 		} catch (SQLException e) {
-			// TODO error handling
 			e.printStackTrace();
 			System.err.println("Some DB error");
 		}
@@ -283,10 +267,6 @@ class Repository implements IRepository {
 	
 	@Override
 	public List<GameInDB> getGames() {
-		// TODO when there are many games in the DB, fetching all available games
-		//      from the DB is a bit extreme; eventually there should a
-		//      method that can filter the returned games in order to
-		//      reduce the number of the returned games.
 		List<GameInDB> result = new ArrayList<>();
 		try {
 			PreparedStatement ps = getSelectGameIdsStatement();
@@ -298,14 +278,12 @@ class Repository implements IRepository {
 			}
 			rs.close();
 		} catch (SQLException e) {
-			// TODO proper error handling
 			e.printStackTrace();
 		}
 		return result;		
 	}
 
 	private void createPlayersInDB(Board game) throws SQLException {
-		// TODO code should be more defensive
 		PreparedStatement ps = getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
 		
@@ -335,7 +313,6 @@ class Repository implements IRepository {
 		while (rs.next()) {
 			int playerId = rs.getInt(PLAYER_PLAYERID);
 			if (i++ == playerId) {
-				// TODO this should be more defensive
 				String name = rs.getString(PLAYER_NAME);
 				String colour = rs.getString(PLAYER_COLOUR);
 				Player player = new Player(game, colour ,name);
@@ -347,7 +324,6 @@ class Repository implements IRepository {
 				int heading = rs.getInt(PLAYER_HEADING);
 				player.setHeading(Heading.values()[heading]);
 			} else {
-				// TODO error handling
 				System.err.println("Game in DB does not have a player with id " + i +"!");
 			}
 		}
@@ -361,19 +337,15 @@ class Repository implements IRepository {
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			int playerId = rs.getInt(PLAYER_PLAYERID);
-			// TODO should be more defensive
 			Player player = game.getPlayer(playerId);
 			// rs.updateString(PLAYER_NAME, player.getName()); // not needed: player's names does not change
 			rs.updateInt(PLAYER_POSITION_X, player.getSpace().x);
 			rs.updateInt(PLAYER_POSITION_Y, player.getSpace().y);
 			rs.updateInt(PLAYER_HEADING, player.getHeading().ordinal());
-			// TODO error handling
-			// TODO take care of case when number of players changes, etc
 			rs.updateRow();
 		}
 		rs.close();
-		
-		// TODO error handling/consistency check: check whether all players were updated
+
 	}
 
 	private static final String SQL_INSERT_GAME =
@@ -389,7 +361,6 @@ class Repository implements IRepository {
 						SQL_INSERT_GAME,
 						Statement.RETURN_GENERATED_KEYS);
 			} catch (SQLException e) {
-				// TODO error handling
 				e.printStackTrace();
 			}
 		}
@@ -410,7 +381,6 @@ class Repository implements IRepository {
 						ResultSet.TYPE_FORWARD_ONLY,
 					    ResultSet.CONCUR_UPDATABLE);
 			} catch (SQLException e) {
-				// TODO error handling
 				e.printStackTrace();
 			}
 		}
@@ -431,7 +401,6 @@ class Repository implements IRepository {
 						ResultSet.TYPE_FORWARD_ONLY,
 						ResultSet.CONCUR_UPDATABLE);
 			} catch (SQLException e) {
-				// TODO error handling
 				e.printStackTrace();
 			}
 		}
@@ -451,7 +420,6 @@ class Repository implements IRepository {
 				select_players_asc_stmt = connection.prepareStatement(
 						SQL_SELECT_PLAYERS_ASC);
 			} catch (SQLException e) {
-				// TODO error handling
 				e.printStackTrace();
 			}
 		}
@@ -470,7 +438,6 @@ class Repository implements IRepository {
 				select_games_stmt = connection.prepareStatement(
 						SQL_SELECT_GAMES);
 			} catch (SQLException e) {
-				// TODO error handling
 				e.printStackTrace();
 			}
 		}

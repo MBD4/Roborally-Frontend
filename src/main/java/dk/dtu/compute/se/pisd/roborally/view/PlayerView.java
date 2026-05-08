@@ -88,12 +88,6 @@ public class PlayerView extends Tab implements ViewObserver {
             }
         }
 
-        // FIXME the following buttons should actually not be on the tabs of the individual
-        //       players, but on the PlayersView (view for all players). This should be
-        //       refactored.
-
-        // TODO A6c: the following buttons should be associated with the proper methods
-        //          in the game controller
 
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction( e -> gameController.notImplemented());
@@ -130,8 +124,6 @@ public class PlayerView extends Tab implements ViewObserver {
         top.getChildren().add(cardsLabel);
         top.getChildren().add(cardsPane);
 
-        // TODO A6d: a label for the status of this player could be added here
-        //     for showing the number of achieved checkpoints (etc).
 
         player.attach(this);
         if (player.board != null) {
@@ -143,8 +135,6 @@ public class PlayerView extends Tab implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
-            // TODO A6d: update the status label for this player (showing the number
-            //     of achieved checkpoints)
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
                 if (cardFieldView != null) {
@@ -207,10 +197,6 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    // TODO A6e: these buttons should be shown only when there is
-                    //      an interactive command card, and the buttons should represent
-                    //      the player's choices of the interactive command card. The
-                    //      following is just a mockup showing two options
                     Button optionButton = new Button("Option1");
                     optionButton.setOnAction( e -> gameController.notImplemented());
                     optionButton.setDisable(false);

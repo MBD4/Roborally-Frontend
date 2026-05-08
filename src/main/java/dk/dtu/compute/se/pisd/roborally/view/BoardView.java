@@ -94,8 +94,6 @@ public class BoardView extends VBox implements ViewObserver {
 
     // XXX A6a the space event handler for delegating the click on a space
     //         to the moveCurrentPlayertoSpace() method
-    // TODO this handler and its uses should eventually be deleted! This is just to help test the
-    //     behaviour of the game by being able to explicitly move the players on the board!
     private class SpaceEventHandler implements EventHandler<MouseEvent> {
 
         final public GameController gameController;

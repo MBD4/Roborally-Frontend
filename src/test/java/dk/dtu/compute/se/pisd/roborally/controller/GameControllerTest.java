@@ -63,6 +63,4 @@ class GameControllerTest {
     }
     */
 
-    // TODO and there should be more tests added for the different assignments eventually
-
 }

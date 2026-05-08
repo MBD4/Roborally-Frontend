@@ -96,10 +96,7 @@ public class AppController implements Observer {
                 }
             }
 
-            // TODO A6b: Use a user dialog here (similar to the one above
-            //     for player number) which lets the user select one of the
-            //     available boards, and then create the chosen board using
-            //     the BoardFactory (instead of creating an empty board).
+
 
             // The code below just creates an empty board with the chosen
             // number of players on it.
@@ -120,11 +117,10 @@ public class AppController implements Observer {
     }
 
     public void saveGame() {
-        // TODO DB4a: needs to be implemented
+
     }
 
     public void loadGame() {
-        // TODO DB4a: needs to be implemented
         // for now, we just create a new game
         if (gameController == null) {
             newGame();

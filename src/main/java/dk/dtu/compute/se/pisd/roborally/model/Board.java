@@ -59,9 +59,7 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
-    // TODO A6a: add a moveCounter attribute to this class;
-    //     and add the corresponding getter and setter methods for
-    //     this move counter at an appropriate place in this class.
+
 
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
@@ -186,9 +184,6 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-        // TODO A6c: This implementation needs to be adjusted so that walls on
-        //          spaces (and maybe other obstacles) are taken into account
-        //          (see above JavaDoc comment for this method).
         int x = space.x;
         int y = space.y;
         switch (heading) {
@@ -214,10 +209,7 @@ public class Board extends Subject {
         // the students, this method gives a string representation of the current
         // status of the game
 
-        // TODO A6a: add the move count to the status message of the board
-        // TODO A6c: change the status so that it shows the phase, the current player, and the current register
-        //     and you can remove the move count status message message and the corresponding counter again
-        // TODO A6e: add something to the status message, when a player has won the game
+
         return "Player = " + getCurrentPlayer().getName();
     }
 

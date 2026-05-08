@@ -91,8 +91,6 @@ class Connector {
 
 			createDatabaseSchema();
 		} catch (SQLException e) {
-			// TODO we should try to diagnose and fix some problems here and
-			//      exit in a more graceful way
 			throw new RuntimeException(e);
 		}
     }
@@ -121,7 +119,6 @@ class Connector {
     		connection.commit();
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		// TODO error handling
     		try {
 				connection.rollback();
 			} catch (SQLException e1) {}

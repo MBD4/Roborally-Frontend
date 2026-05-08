@@ -90,8 +90,6 @@ public class SpaceView extends StackPane implements ViewObserver {
         if (subject == this.space) {
             this.getChildren().clear();
 
-            // TODO A6b: drawing the walls and the field action(s) on
-            //     this space could be implemented here.
 
             updatePlayer();
         }

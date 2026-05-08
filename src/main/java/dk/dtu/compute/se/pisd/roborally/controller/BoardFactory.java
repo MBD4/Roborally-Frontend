@@ -43,10 +43,6 @@ public class BoardFactory {
      * @return the new board corresponding to that name
      */
     public Board createBoard(String name) {
-        // TODO A6b: Implement this method properly as described in Assignment 6b.
-        //     Dependent on the provided name, create a board accordingly and
-        //     return it. In case the name is null, some default board should
-        //     be returned (defensive programming).
 
         Board board;
         if (name == null) {
@@ -87,12 +83,5 @@ public class BoardFactory {
 
         return board;
     }
-
-    // TODO A6b: add a method that returns a list (of type List<String>)
-    //     of all available board names. The corresponding method
-    //     createBoard(String name) must return a board for any of the
-    //     names in this list. Make sure that the new method that you create
-    //     here has a proper JavaDoc documentation.
-    //
 
 }

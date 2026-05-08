@@ -111,6 +111,15 @@ public class OnlineController {
 
     // DONE Assignment 7c: you might want to implement a method of signing up
     //      (registering) a new user here!
+
+    /**
+     * Register a new user by Posting to {@code /user}. Validates that {@code name}
+     * is at least 4 characters, sends the request and on success calls
+     * {@link #setOnlineUser(User)} with the created user. Shows an error alert if
+     * registration fails or a warning if the name is too short.
+     *
+     * @param name the chosen username (must be 4+ characters)
+     */
     public void signUp(String name) {
         if (name.length() >= 4) {
             try {

@@ -145,9 +145,6 @@ public class LoadBoard {
         template.height = board.height;
 
         ClassLoader classLoader = AppController.class.getClassLoader();
-        // FIXME: this is not very defensive and will result in a NullPointerException
-        //         when the folder BOARDSFOLDER does not exist! But, the file does not
-        //         need to exist at this point!
         String filename =
                 classLoader.getResource(BOARDSFOLDER).getPath() + "/" + name + "." + JSON_EXT;
 

@@ -45,14 +45,6 @@ public class GameController {
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // TODO A6a: this method should be implemented for Assignment 6a:
-        //   - the current player should be moved to the given space
-        //     (if it is free())
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if and when the player is moved (the counter and the status line
-        //     message needs to be implemented at another place)
 
     }
 
@@ -137,11 +129,6 @@ public class GameController {
     }
 
     // XXX A6c
-    // TODO A6d: add the execution of the field actions at the right
-    //      place in this method
-    // TODO A6e: implement the execution af an interactive card to
-    //     this method (e.g. by switching to the PLAYER_INTERACTION phase
-    //     at the right point)
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
@@ -195,35 +182,27 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
-                // TODO A6c: add the cases for the new commands BACK and UTURN to
-                //     this case statement.
                 default:
                     // DO NOTHING (for now)//
             }
         }
     }
 
-    // TODO A6c: implement this method
     public void moveForward(@NotNull Player player) {
 
     }
 
-    // TODO A6c: implement this method
     public void fastForward(@NotNull Player player) {
 
     }
 
-    // TODO A6c: implement this method
     public void turnRight(@NotNull Player player) {
 
     }
 
-    // TODO A6c: implement this method
     public void turnLeft(@NotNull Player player) {
 
     }
-
-    // TODO A6c: Add two methods for the new commands BACK and UTURN here.
 
     /**
      * A method called when no corresponding controller operation is implemented yet.
