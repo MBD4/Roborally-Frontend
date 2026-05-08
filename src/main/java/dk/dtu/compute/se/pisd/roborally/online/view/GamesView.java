@@ -3,6 +3,7 @@ package dk.dtu.compute.se.pisd.roborally.online.view;
 import dk.dtu.compute.se.pisd.roborally.online.controller.OnlineController;
 import dk.dtu.compute.se.pisd.roborally.online.model.Game;
 
+import dk.dtu.compute.se.pisd.roborally.online.model.GameState;
 import dk.dtu.compute.se.pisd.roborally.online.model.Player;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -93,13 +94,19 @@ public class GamesView extends GridPane {
 
                 Button startButton = new Button("Start");
                 startButton.setOnAction( e -> onlineController.gameSelected(game) );
-                if (game.getMinPlayers() <= game.getPlayers().size() &&
-                        game.getMaxPlayers() >= game.getPlayers().size() &&
-                        onlineController.userOwnsGame(game)) {
-                    startButton.setDisable(false);
-                } else {
-                    startButton.setDisable(true);
+                boolean canStart = false;
+                boolean isOwner = onlineController.userOwnsGame(game);
+                boolean inGame = onlineController.userInGame(game);
+                boolean playerCountOk = game.getMinPlayers() <= game.getPlayers().size()
+                        && game.getMaxPlayers() >= game.getPlayers().size();
+
+                if (isOwner && playerCountOk) {
+                    canStart = true;
+                } else if (!isOwner && inGame && game.getState() == GameState.ACTIVE) {
+                    canStart = true;
                 }
+
+                startButton.setDisable(!canStart);
 
                 Button deleteButton = new Button("Delete");
                 deleteButton.setOnAction(

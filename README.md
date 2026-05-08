@@ -36,4 +36,5 @@ On the other side of the system is the frontend project, which is a JavaFX deskt
 The client uses a built-in REST client to communicate with our backend Controllers, fetching live updates about lobbies and posting user actions over HTTP.
 When we click "Join" or "Refresh," the frontend sends the specific network request and updates the graphical user interface based on the server's response.
 If multiple clients are running and a change is made on one client, it doesn't automatically update the others, so you need to hit the refresh button,
-that sends a get request for the updated state of the DB. 
+that sends a get request for the updated state of the DB. One of the features we added was listing the owner for each game, 
+above the players, so you can clearly see who owns the game.
