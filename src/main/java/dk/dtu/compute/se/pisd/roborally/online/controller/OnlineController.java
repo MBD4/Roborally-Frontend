@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class OnlineController {
 
-
+    private static final int MIN_USERNAME_LENGTH = 4;
 
     public final AppController appController;
 
@@ -36,6 +36,13 @@ public class OnlineController {
      */
     private RestClient restClient;
 
+    /**
+     * Constructs an OnlineController using the given AppController.
+     * Initializes a new OnlineState, builds a RestClient configured with
+     * ROBORALLY_BACKEND_URL, and creates the AppDialogs helper.
+     *
+     * @param appController the application controller used by this OnlineController
+     */
     public OnlineController(AppController appController) {
         this.appController = appController;
         this.onlineState = new OnlineState();
@@ -45,10 +52,17 @@ public class OnlineController {
         this.appDialogs = new AppDialogs(this);
     }
 
+    /**
+     * Sign in a user by name. If name length >= MIN_USERNAME_LENGTH the backend
+     * is queried. The first returned user, if any, is set via {@link #setOnlineUser(User)}.
+     *
+     * @param name the username to sign in
+     * @throws RuntimeException if the REST call fails
+     */
     public void signIn(String name) {
-        // FIXME the 4 below is a bit arbitray and should be a constant defines
+        // DONE the 4 below is a bit arbitray and should be a constant defines
         //       somewhere in the code or a configuration file!!
-        if (name.length() >= 4) {
+        if (name.length() >= MIN_USERNAME_LENGTH) {
             try {
                 List<User> users = restClient.get()
                         .uri(uriBuilder -> uriBuilder
@@ -70,12 +84,12 @@ public class OnlineController {
             //      returened by the backend (with the correct uid) is added
             //      as onLineUser in this controller! (NOT the once created
             //      in the code below!)
-//            User user = new User();
-//            user.setName(name);
-//            setOnlineUser(user);
         }
     }
 
+    /**
+     * Opens the sign-in dialog unless a game is running or game selection is active.
+     */
     public void signIn() {
         if (appController.isGameRunning()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -94,6 +108,10 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Sign out the current online user.
+     * If a user is signed in a confirmation dialog is shown. On OK calls {@link #setOnlineUser(User)} with null.
+     */
     public void signOut() {
         if (onlineState.getSignedInUser() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -121,7 +139,7 @@ public class OnlineController {
      * @param name the chosen username (must be 4+ characters)
      */
     public void signUp(String name) {
-        if (name.length() >= 4) {
+        if (name.length() >= MIN_USERNAME_LENGTH) {
             try {
                 User newUser = new User();
                 newUser.setName(name);
@@ -147,11 +165,14 @@ public class OnlineController {
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
             alert.setTitle("Invalid Name");
             alert.setHeaderText("Name too short");
-            alert.setContentText("Your username must be at least 4 characters long.");
+            alert.setContentText("Your username must be at least " + MIN_USERNAME_LENGTH + " characters long.");
             alert.showAndWait();
         }
     }
 
+    /**
+     * Open the sign-up dialog unless a game is running or game selection is active.
+     */
     public void signUp() {
         if (appController.isGameRunning()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -168,6 +189,12 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Set the current online user and show an info dialog (welcome or logged out),
+     * unless a game is running or game selection is active.
+     *
+     * @param user the user to set as signed in
+     */
     public void setOnlineUser(User user) {
         if (!appController.isGameRunning() && !gameSelectionOn) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -183,6 +210,9 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Load the list of open games from the backend and store it in OnlineState.
+     */
     public void refreshGames() {
         try {
             // DONE Assignment 7b: Obtain the list of all games from the backend!
@@ -197,6 +227,9 @@ public class OnlineController {
 
     private boolean gameSelectionOn = false;
 
+    /**
+     * Show the game selection view if the user is signed in and no game is running.
+     */
     public void selectGame() {
         if (appController.isGameRunning()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -217,6 +250,9 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Close the game selection view and start the selected game if one was chosen.
+     */
     public void gameSelected(Game game) {
         if (!appController.isGameRunning() /* && onlineState.getSignedInUser() != null && gameSelectionOn */) {
             appController.roboRally.createGameSelectionView(null);
@@ -249,6 +285,9 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Create a new game in the backend and then refresh the game list.
+     */
     public void createGame(Game game) {
         if (!appController.isGameRunning() && onlineState.getSignedInUser() != null && gameSelectionOn) {
 
@@ -274,10 +313,16 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Open the dialog for creating a new game.
+     */
     public void createGame() {
         appDialogs.createNewGame();
     }
 
+    /**
+     * Add the current user to the given game if there is room and the user is not already in it.
+     */
     public void joinGame(Game game) {
         try {
 
@@ -323,6 +368,9 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Remove the current user from the given game.
+     */
     public void leaveGame(Game game) {
         try {
             // DONE Assignment 7d: delete the currently active user as a player
@@ -344,6 +392,9 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Delete the given game from the backend.
+     */
     public void deleteGame(Game game) {
         try {
 
@@ -359,6 +410,9 @@ public class OnlineController {
         }
     }
 
+    /**
+     * Check whether the current user is a player in the given game.
+     */
     public boolean userInGame(Game game) {
 
         // DONE Assignment 7c: this method should return true if the
@@ -379,6 +433,9 @@ public class OnlineController {
         return false;
     }
 
+    /**
+     * Check whether the current user owns the given game.
+     */
     public boolean userOwnsGame(Game game) {
 
         // DONE Assignment 7c: this method should return true
@@ -397,6 +454,9 @@ public class OnlineController {
         return false;
     }
 
+    /**
+     * Create the local game board and start the programming phase for the selected game.
+     */
     private void startGame(Game game) {
         // OPTIONAL(didnt do it) Assignment 7e: creation of the board should eventually depend
         //      on the board provided by the Game information.
@@ -424,16 +484,5 @@ public class OnlineController {
         appController.roboRally.createBoardView(gameController);
     }
 
-    // TODO still somethings to do here for the real game play.
-    //      - where to save the game controller (here we just forget it); it should probably be
-    //        part of the online state
-    //      - who is owner (controlling game logic) and communicating that to the backend
-    //      - coordinating with the backend and updating the game state accordingly
-    //      - sending users choices to the backend
-    //      - not showing the hidden data (hand cards and not ye played program cards)
-    //        for the other players in view
-    //      - ...
-    //      But this is not part of the course 02324 and its assignment. This assignment is just
-    //      about creating a game and different users joining it (coordinated by the backend).
 
 }
