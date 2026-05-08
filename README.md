@@ -7,6 +7,7 @@ a backend server and a frontend desktop client.
 Features Implemented
 We built several core features to make the multiplayer experience seamless:
 - User Management:Players can register a new account or sign in using a username that is at least four characters long.
+  The uniqueness of usernames, is checked automatically since we added @Column(unique=true) on the name attribute of the User class.
 - Matchmaking & Lobbies: From the main dashboard, players can browse a live list of all open games, checking who owns them and how many slots are left.
   We can either join an existing game or create a brand new one.
 - Ownership & Permissions: When we create a new game, we set the minimum and maximum number of players,
