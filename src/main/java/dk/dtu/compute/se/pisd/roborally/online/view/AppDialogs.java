@@ -4,6 +4,7 @@ import dk.dtu.compute.se.pisd.roborally.online.controller.OnlineController;
 import dk.dtu.compute.se.pisd.roborally.online.model.Game;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -110,13 +111,32 @@ public class AppDialogs {
                     try {
                         Game game = new Game();
                         game.setName(gameName.getText());
-                        // TODO needs clean up!!
-                        game.setMinPlayers(Integer.parseInt(min.getText()));
-                        game.setMaxPlayers(Integer.parseInt(max.getText()));
+                        int minPlayers = Integer.parseInt(min.getText());
+                        int maxPlayers = Integer.parseInt(max.getText());
+                        if (minPlayers > maxPlayers) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Invalid player limits");
+                            alert.setHeaderText("Minimum players cannot exceed maximum players.");
+                            alert.setContentText("Please enter a minimum that is less than or equal to the maximum.");
+                            alert.showAndWait();
+                            return;
+                        }
+                        game.setMinPlayers(minPlayers);
+                        game.setMaxPlayers(maxPlayers);
                         onlineController.createGame(game);
                         stage.close();
+                    } catch (NumberFormatException exception) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Invalid input");
+                        alert.setHeaderText("Player limits must be numbers.");
+                        alert.setContentText("Please enter valid integer values for min and max players.");
+                        alert.showAndWait();
                     } catch (Exception exception) {
-                        //  TODO better error handling here
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Could not create game");
+                        alert.setHeaderText("Something went wrong while creating the game.");
+                        alert.setContentText("Please try again.");
+                        alert.showAndWait();
                     }
                 }
         );
